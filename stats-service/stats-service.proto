@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package stats;
+
+option go_package = "shamank.stats-service.v1;statsv1";
+
+service User {
+
+}
+
+service AIService {
+  rpc Create (CreateServiceRequest) returns (CreateServiceResponse);
+}
+
+message CreateServiceRequest {
+  string e = 1;
+}
+
+message CreateServiceResponse {
+  string e = 1;
+}
