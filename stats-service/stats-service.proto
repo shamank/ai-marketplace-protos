@@ -57,7 +57,7 @@ message Stats {
 message CreateServiceRequest {
   string title = 1;
   string description = 2;
-  uint64 price = 3;
+  uint32 price = 3;
 }
 
 message CreateServiceResponse {
