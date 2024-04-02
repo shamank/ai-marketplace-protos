@@ -11,7 +11,7 @@ service StatsService {
   rpc GetStats (GetStatsRequest) returns (GetStatsResponse);
 
   // Метод для создания новой записи в статистике
-  rpc SetStat (SetStatRequest) returns (UpdateStatsResponse);
+  rpc SetStat (SetStatRequest) returns (SetStatResponse);
 }
 
 // Сервис для работы с AI-сервисами
@@ -26,8 +26,8 @@ message SetStatRequest {
   string service_uid = 2;
 }
 
-message UpdateStatsResponse {
-  string count = 1;
+message SetStatResponse {
+  string stat_uid = 1;
 }
 
 enum OrderEnum {

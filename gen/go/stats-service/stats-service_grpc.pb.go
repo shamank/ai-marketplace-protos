@@ -25,7 +25,7 @@ type StatsServiceClient interface {
 	// Метод для получения статистики
 	GetStats(ctx context.Context, in *GetStatsRequest, opts ...grpc.CallOption) (*GetStatsResponse, error)
 	// Метод для создания новой записи в статистике
-	SetStat(ctx context.Context, in *SetStatRequest, opts ...grpc.CallOption) (*UpdateStatsResponse, error)
+	SetStat(ctx context.Context, in *SetStatRequest, opts ...grpc.CallOption) (*SetStatResponse, error)
 }
 
 type statsServiceClient struct {
@@ -45,8 +45,8 @@ func (c *statsServiceClient) GetStats(ctx context.Context, in *GetStatsRequest, 
 	return out, nil
 }
 
-func (c *statsServiceClient) SetStat(ctx context.Context, in *SetStatRequest, opts ...grpc.CallOption) (*UpdateStatsResponse, error) {
-	out := new(UpdateStatsResponse)
+func (c *statsServiceClient) SetStat(ctx context.Context, in *SetStatRequest, opts ...grpc.CallOption) (*SetStatResponse, error) {
+	out := new(SetStatResponse)
 	err := c.cc.Invoke(ctx, "/stats.StatsService/SetStat", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -61,7 +61,7 @@ type StatsServiceServer interface {
 	// Метод для получения статистики
 	GetStats(context.Context, *GetStatsRequest) (*GetStatsResponse, error)
 	// Метод для создания новой записи в статистике
-	SetStat(context.Context, *SetStatRequest) (*UpdateStatsResponse, error)
+	SetStat(context.Context, *SetStatRequest) (*SetStatResponse, error)
 	mustEmbedUnimplementedStatsServiceServer()
 }
 
@@ -72,7 +72,7 @@ type UnimplementedStatsServiceServer struct {
 func (UnimplementedStatsServiceServer) GetStats(context.Context, *GetStatsRequest) (*GetStatsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStats not implemented")
 }
-func (UnimplementedStatsServiceServer) SetStat(context.Context, *SetStatRequest) (*UpdateStatsResponse, error) {
+func (UnimplementedStatsServiceServer) SetStat(context.Context, *SetStatRequest) (*SetStatResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetStat not implemented")
 }
 func (UnimplementedStatsServiceServer) mustEmbedUnimplementedStatsServiceServer() {}
