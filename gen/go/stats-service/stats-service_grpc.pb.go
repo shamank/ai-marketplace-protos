@@ -22,8 +22,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type StatsServiceClient interface {
+	// Метод для получения статистики
 	GetStats(ctx context.Context, in *GetStatsRequest, opts ...grpc.CallOption) (*GetStatsResponse, error)
-	UpdateStats(ctx context.Context, in *UpdateStatsRequest, opts ...grpc.CallOption) (*UpdateStatsResponse, error)
+	// Метод для создания новой записи в статистике
+	SetStat(ctx context.Context, in *SetStatRequest, opts ...grpc.CallOption) (*UpdateStatsResponse, error)
 }
 
 type statsServiceClient struct {
@@ -43,9 +45,9 @@ func (c *statsServiceClient) GetStats(ctx context.Context, in *GetStatsRequest, 
 	return out, nil
 }
 
-func (c *statsServiceClient) UpdateStats(ctx context.Context, in *UpdateStatsRequest, opts ...grpc.CallOption) (*UpdateStatsResponse, error) {
+func (c *statsServiceClient) SetStat(ctx context.Context, in *SetStatRequest, opts ...grpc.CallOption) (*UpdateStatsResponse, error) {
 	out := new(UpdateStatsResponse)
-	err := c.cc.Invoke(ctx, "/stats.StatsService/UpdateStats", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/stats.StatsService/SetStat", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -56,8 +58,10 @@ func (c *statsServiceClient) UpdateStats(ctx context.Context, in *UpdateStatsReq
 // All implementations must embed UnimplementedStatsServiceServer
 // for forward compatibility
 type StatsServiceServer interface {
+	// Метод для получения статистики
 	GetStats(context.Context, *GetStatsRequest) (*GetStatsResponse, error)
-	UpdateStats(context.Context, *UpdateStatsRequest) (*UpdateStatsResponse, error)
+	// Метод для создания новой записи в статистике
+	SetStat(context.Context, *SetStatRequest) (*UpdateStatsResponse, error)
 	mustEmbedUnimplementedStatsServiceServer()
 }
 
@@ -68,8 +72,8 @@ type UnimplementedStatsServiceServer struct {
 func (UnimplementedStatsServiceServer) GetStats(context.Context, *GetStatsRequest) (*GetStatsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetStats not implemented")
 }
-func (UnimplementedStatsServiceServer) UpdateStats(context.Context, *UpdateStatsRequest) (*UpdateStatsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateStats not implemented")
+func (UnimplementedStatsServiceServer) SetStat(context.Context, *SetStatRequest) (*UpdateStatsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetStat not implemented")
 }
 func (UnimplementedStatsServiceServer) mustEmbedUnimplementedStatsServiceServer() {}
 
@@ -102,20 +106,20 @@ func _StatsService_GetStats_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StatsService_UpdateStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateStatsRequest)
+func _StatsService_SetStat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetStatRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StatsServiceServer).UpdateStats(ctx, in)
+		return srv.(StatsServiceServer).SetStat(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/stats.StatsService/UpdateStats",
+		FullMethod: "/stats.StatsService/SetStat",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StatsServiceServer).UpdateStats(ctx, req.(*UpdateStatsRequest))
+		return srv.(StatsServiceServer).SetStat(ctx, req.(*SetStatRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -132,8 +136,8 @@ var StatsService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _StatsService_GetStats_Handler,
 		},
 		{
-			MethodName: "UpdateStats",
-			Handler:    _StatsService_UpdateStats_Handler,
+			MethodName: "SetStat",
+			Handler:    _StatsService_SetStat_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -144,6 +148,7 @@ var StatsService_ServiceDesc = grpc.ServiceDesc{
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AIServiceClient interface {
+	// Метод для создания нового AI-сервиса
 	CreateAIService(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*CreateServiceResponse, error)
 }
 
@@ -168,6 +173,7 @@ func (c *aIServiceClient) CreateAIService(ctx context.Context, in *CreateService
 // All implementations must embed UnimplementedAIServiceServer
 // for forward compatibility
 type AIServiceServer interface {
+	// Метод для создания нового AI-сервиса
 	CreateAIService(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error)
 	mustEmbedUnimplementedAIServiceServer()
 }

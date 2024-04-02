@@ -4,46 +4,62 @@ package stats;
 
 option go_package = "stats-service.v1;statsv1";
 
+
+// Сервис для работы со статистикой
 service StatsService {
+  // Метод для получения статистики
   rpc GetStats (GetStatsRequest) returns (GetStatsResponse);
-  rpc UpdateStats (UpdateStatsRequest) returns (UpdateStatsResponse);
+
+  // Метод для создания новой записи в статистике
+  rpc SetStat (SetStatRequest) returns (UpdateStatsResponse);
 }
 
+// Сервис для работы с AI-сервисами
 service AIService {
+
+  // Метод для создания нового AI-сервиса
   rpc CreateAIService (CreateServiceRequest) returns (CreateServiceResponse);
 }
 
-message UpdateStatsRequest {
+message SetStatRequest {
   string user_uid = 1;
   string service_uid = 2;
-  string count = 3;
 }
 
 message UpdateStatsResponse {
   string count = 1;
 }
 
+enum OrderEnum {
+  ASC = 0;
+  DESC = 1;
+}
+
 message GetStatsRequest {
   string user_uid = 1;
   string service_uid = 2;
+  uint32 page_number = 3;
+  uint32 page_size = 4;
+  OrderEnum order = 5;
 }
 
 message GetStatsResponse {
-  string count = 1;
+  repeated Stats stats = 1;
 }
 
+message Stats {
+  string user_uid = 1;
+  string service_uid = 2;
+  uint32 count = 3;
+  uint32 amount = 4;
+}
 
 message CreateServiceRequest {
   string title = 1;
-  optional string description = 2;
-}
-
-enum StatusEnum {
-  ok = 0;
-  error = 1;
+  string description = 2;
+  uint64 price = 3;
 }
 
 message CreateServiceResponse {
   string service_uid = 1;
-  StatusEnum status = 2;
 }
