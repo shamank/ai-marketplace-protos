@@ -2,20 +2,48 @@ syntax = "proto3";
 
 package stats;
 
-option go_package = "shamank.stats-service.v1;statsv1";
+option go_package = "stats-service.v1";
 
-service User {
-
+service StatsService {
+  rpc GetStats (GetStatsRequest) returns (GetStatsResponse);
+  rpc UpdateStats (UpdateStatsRequest) returns (UpdateStatsResponse);
 }
 
 service AIService {
-  rpc Create (CreateServiceRequest) returns (CreateServiceResponse);
+  rpc CreateAIService (CreateServiceRequest) returns (CreateServiceResponse);
 }
 
+message UpdateStatsRequest {
+  string user_uid = 1;
+  string service_uid = 2;
+  string count = 3;
+}
+
+message UpdateStatsResponse {
+  string count = 1;
+}
+
+message GetStatsRequest {
+  string user_uid = 1;
+  string service_uid = 2;
+}
+
+message GetStatsResponse {
+  string count = 1;
+}
+
+
 message CreateServiceRequest {
-  string e = 1;
+  string title = 1;
+  optional string description = 2;
+}
+
+enum StatusEnum {
+  ok = 0;
+  error = 1;
 }
 
 message CreateServiceResponse {
-  string e = 1;
+  string service_uid = 1;
+  StatusEnum status = 2;
 }
