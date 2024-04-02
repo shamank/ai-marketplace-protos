@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package stats;
 
-option go_package = "stats-service.v1";
+option go_package = "stats-service.v1;statsv1";
 
 service StatsService {
   rpc GetStats (GetStatsRequest) returns (GetStatsResponse);

@@ -4,7 +4,7 @@
 // - protoc             v5.26.1
 // source: stats-service/stats-service.proto
 
-package stats_service_v1
+package statsv1
 
 import (
 	context "context"
