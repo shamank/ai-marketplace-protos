@@ -4,30 +4,36 @@ package stats;
 
 option go_package = "stats-service.v1;statsv1";
 
-
-// Сервис для работы со статистикой
-service StatsService {
-  // Метод для получения статистики
-  rpc GetStats (GetStatsRequest) returns (GetStatsResponse);
-
-  // Метод для создания новой записи в статистике
-  rpc SetStat (SetStatRequest) returns (SetStatResponse);
-}
-
 // Сервис для работы с AI-сервисами
-service AIService {
+service StatisticService {
 
   // Метод для создания нового AI-сервиса
-  rpc CreateAIService (CreateServiceRequest) returns (CreateServiceResponse);
+  rpc Create (CreateAIServiceRequest) returns (CreateAIServiceResponse);
+
+  // Метод вызова сервиса пользователем
+  rpc Call (CallRequest) returns (CallResponse);
+
+  // Метод получения статистики
+  rpc GetCalls (GetCallsRequest) returns (GetCallsResponse);
 }
 
-message SetStatRequest {
+message CreateAIServiceRequest {
+  string title = 1;
+  string description = 2;
+  uint32 price = 3;
+}
+
+message CreateAIServiceResponse {
+  string service_uid = 1;
+}
+
+message CallRequest {
   string user_uid = 1;
   string service_uid = 2;
 }
 
-message SetStatResponse {
-  string stat_uid = 1;
+message CallResponse {
+  string message = 1;
 }
 
 enum OrderEnum {
@@ -35,7 +41,7 @@ enum OrderEnum {
   DESC = 1;
 }
 
-message GetStatsRequest {
+message GetCallsRequest {
   string user_uid = 1;
   string service_uid = 2;
   uint32 page_number = 3;
@@ -43,23 +49,14 @@ message GetStatsRequest {
   OrderEnum order = 5;
 }
 
-message GetStatsResponse {
-  repeated Stats stats = 1;
+message GetCallsResponse {
+  repeated Calls calls = 1;
 }
 
-message Stats {
+message Calls {
   string user_uid = 1;
   string service_uid = 2;
   uint32 count = 3;
   uint32 amount = 4;
 }
 
-message CreateServiceRequest {
-  string title = 1;
-  string description = 2;
-  uint32 price = 3;
-}
-
-message CreateServiceResponse {
-  string service_uid = 1;
-}

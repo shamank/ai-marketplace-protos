@@ -18,214 +18,164 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// StatsServiceClient is the client API for StatsService service.
+// StatisticServiceClient is the client API for StatisticService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type StatsServiceClient interface {
-	// Метод для получения статистики
-	GetStats(ctx context.Context, in *GetStatsRequest, opts ...grpc.CallOption) (*GetStatsResponse, error)
-	// Метод для создания новой записи в статистике
-	SetStat(ctx context.Context, in *SetStatRequest, opts ...grpc.CallOption) (*SetStatResponse, error)
+type StatisticServiceClient interface {
+	// Метод для создания нового AI-сервиса
+	Create(ctx context.Context, in *CreateAIServiceRequest, opts ...grpc.CallOption) (*CreateAIServiceResponse, error)
+	// Метод вызова сервиса пользователем
+	Call(ctx context.Context, in *CallRequest, opts ...grpc.CallOption) (*CallResponse, error)
+	// Метод получения статистики
+	GetCalls(ctx context.Context, in *GetCallsRequest, opts ...grpc.CallOption) (*GetCallsResponse, error)
 }
 
-type statsServiceClient struct {
+type statisticServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewStatsServiceClient(cc grpc.ClientConnInterface) StatsServiceClient {
-	return &statsServiceClient{cc}
+func NewStatisticServiceClient(cc grpc.ClientConnInterface) StatisticServiceClient {
+	return &statisticServiceClient{cc}
 }
 
-func (c *statsServiceClient) GetStats(ctx context.Context, in *GetStatsRequest, opts ...grpc.CallOption) (*GetStatsResponse, error) {
-	out := new(GetStatsResponse)
-	err := c.cc.Invoke(ctx, "/stats.StatsService/GetStats", in, out, opts...)
+func (c *statisticServiceClient) Create(ctx context.Context, in *CreateAIServiceRequest, opts ...grpc.CallOption) (*CreateAIServiceResponse, error) {
+	out := new(CreateAIServiceResponse)
+	err := c.cc.Invoke(ctx, "/stats.StatisticService/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *statsServiceClient) SetStat(ctx context.Context, in *SetStatRequest, opts ...grpc.CallOption) (*SetStatResponse, error) {
-	out := new(SetStatResponse)
-	err := c.cc.Invoke(ctx, "/stats.StatsService/SetStat", in, out, opts...)
+func (c *statisticServiceClient) Call(ctx context.Context, in *CallRequest, opts ...grpc.CallOption) (*CallResponse, error) {
+	out := new(CallResponse)
+	err := c.cc.Invoke(ctx, "/stats.StatisticService/Call", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// StatsServiceServer is the server API for StatsService service.
-// All implementations must embed UnimplementedStatsServiceServer
+func (c *statisticServiceClient) GetCalls(ctx context.Context, in *GetCallsRequest, opts ...grpc.CallOption) (*GetCallsResponse, error) {
+	out := new(GetCallsResponse)
+	err := c.cc.Invoke(ctx, "/stats.StatisticService/GetCalls", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// StatisticServiceServer is the server API for StatisticService service.
+// All implementations must embed UnimplementedStatisticServiceServer
 // for forward compatibility
-type StatsServiceServer interface {
-	// Метод для получения статистики
-	GetStats(context.Context, *GetStatsRequest) (*GetStatsResponse, error)
-	// Метод для создания новой записи в статистике
-	SetStat(context.Context, *SetStatRequest) (*SetStatResponse, error)
-	mustEmbedUnimplementedStatsServiceServer()
+type StatisticServiceServer interface {
+	// Метод для создания нового AI-сервиса
+	Create(context.Context, *CreateAIServiceRequest) (*CreateAIServiceResponse, error)
+	// Метод вызова сервиса пользователем
+	Call(context.Context, *CallRequest) (*CallResponse, error)
+	// Метод получения статистики
+	GetCalls(context.Context, *GetCallsRequest) (*GetCallsResponse, error)
+	mustEmbedUnimplementedStatisticServiceServer()
 }
 
-// UnimplementedStatsServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedStatsServiceServer struct {
+// UnimplementedStatisticServiceServer must be embedded to have forward compatible implementations.
+type UnimplementedStatisticServiceServer struct {
 }
 
-func (UnimplementedStatsServiceServer) GetStats(context.Context, *GetStatsRequest) (*GetStatsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetStats not implemented")
+func (UnimplementedStatisticServiceServer) Create(context.Context, *CreateAIServiceRequest) (*CreateAIServiceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Create not implemented")
 }
-func (UnimplementedStatsServiceServer) SetStat(context.Context, *SetStatRequest) (*SetStatResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetStat not implemented")
+func (UnimplementedStatisticServiceServer) Call(context.Context, *CallRequest) (*CallResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Call not implemented")
 }
-func (UnimplementedStatsServiceServer) mustEmbedUnimplementedStatsServiceServer() {}
+func (UnimplementedStatisticServiceServer) GetCalls(context.Context, *GetCallsRequest) (*GetCallsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetCalls not implemented")
+}
+func (UnimplementedStatisticServiceServer) mustEmbedUnimplementedStatisticServiceServer() {}
 
-// UnsafeStatsServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to StatsServiceServer will
+// UnsafeStatisticServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to StatisticServiceServer will
 // result in compilation errors.
-type UnsafeStatsServiceServer interface {
-	mustEmbedUnimplementedStatsServiceServer()
+type UnsafeStatisticServiceServer interface {
+	mustEmbedUnimplementedStatisticServiceServer()
 }
 
-func RegisterStatsServiceServer(s grpc.ServiceRegistrar, srv StatsServiceServer) {
-	s.RegisterService(&StatsService_ServiceDesc, srv)
+func RegisterStatisticServiceServer(s grpc.ServiceRegistrar, srv StatisticServiceServer) {
+	s.RegisterService(&StatisticService_ServiceDesc, srv)
 }
 
-func _StatsService_GetStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetStatsRequest)
+func _StatisticService_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateAIServiceRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StatsServiceServer).GetStats(ctx, in)
+		return srv.(StatisticServiceServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/stats.StatsService/GetStats",
+		FullMethod: "/stats.StatisticService/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StatsServiceServer).GetStats(ctx, req.(*GetStatsRequest))
+		return srv.(StatisticServiceServer).Create(ctx, req.(*CreateAIServiceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _StatsService_SetStat_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetStatRequest)
+func _StatisticService_Call_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CallRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(StatsServiceServer).SetStat(ctx, in)
+		return srv.(StatisticServiceServer).Call(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/stats.StatsService/SetStat",
+		FullMethod: "/stats.StatisticService/Call",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(StatsServiceServer).SetStat(ctx, req.(*SetStatRequest))
+		return srv.(StatisticServiceServer).Call(ctx, req.(*CallRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// StatsService_ServiceDesc is the grpc.ServiceDesc for StatsService service.
+func _StatisticService_GetCalls_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetCallsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(StatisticServiceServer).GetCalls(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/stats.StatisticService/GetCalls",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(StatisticServiceServer).GetCalls(ctx, req.(*GetCallsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// StatisticService_ServiceDesc is the grpc.ServiceDesc for StatisticService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var StatsService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "stats.StatsService",
-	HandlerType: (*StatsServiceServer)(nil),
+var StatisticService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "stats.StatisticService",
+	HandlerType: (*StatisticServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetStats",
-			Handler:    _StatsService_GetStats_Handler,
+			MethodName: "Create",
+			Handler:    _StatisticService_Create_Handler,
 		},
 		{
-			MethodName: "SetStat",
-			Handler:    _StatsService_SetStat_Handler,
+			MethodName: "Call",
+			Handler:    _StatisticService_Call_Handler,
 		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "stats-service/stats-service.proto",
-}
-
-// AIServiceClient is the client API for AIService service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type AIServiceClient interface {
-	// Метод для создания нового AI-сервиса
-	CreateAIService(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*CreateServiceResponse, error)
-}
-
-type aIServiceClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewAIServiceClient(cc grpc.ClientConnInterface) AIServiceClient {
-	return &aIServiceClient{cc}
-}
-
-func (c *aIServiceClient) CreateAIService(ctx context.Context, in *CreateServiceRequest, opts ...grpc.CallOption) (*CreateServiceResponse, error) {
-	out := new(CreateServiceResponse)
-	err := c.cc.Invoke(ctx, "/stats.AIService/CreateAIService", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// AIServiceServer is the server API for AIService service.
-// All implementations must embed UnimplementedAIServiceServer
-// for forward compatibility
-type AIServiceServer interface {
-	// Метод для создания нового AI-сервиса
-	CreateAIService(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error)
-	mustEmbedUnimplementedAIServiceServer()
-}
-
-// UnimplementedAIServiceServer must be embedded to have forward compatible implementations.
-type UnimplementedAIServiceServer struct {
-}
-
-func (UnimplementedAIServiceServer) CreateAIService(context.Context, *CreateServiceRequest) (*CreateServiceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateAIService not implemented")
-}
-func (UnimplementedAIServiceServer) mustEmbedUnimplementedAIServiceServer() {}
-
-// UnsafeAIServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to AIServiceServer will
-// result in compilation errors.
-type UnsafeAIServiceServer interface {
-	mustEmbedUnimplementedAIServiceServer()
-}
-
-func RegisterAIServiceServer(s grpc.ServiceRegistrar, srv AIServiceServer) {
-	s.RegisterService(&AIService_ServiceDesc, srv)
-}
-
-func _AIService_CreateAIService_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateServiceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AIServiceServer).CreateAIService(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/stats.AIService/CreateAIService",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AIServiceServer).CreateAIService(ctx, req.(*CreateServiceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-// AIService_ServiceDesc is the grpc.ServiceDesc for AIService service.
-// It's only intended for direct use with grpc.RegisterService,
-// and not to be introspected or modified (even as a copy)
-var AIService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "stats.AIService",
-	HandlerType: (*AIServiceServer)(nil),
-	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateAIService",
-			Handler:    _AIService_CreateAIService_Handler,
+			MethodName: "GetCalls",
+			Handler:    _StatisticService_GetCalls_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
