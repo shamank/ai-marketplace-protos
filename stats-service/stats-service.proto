@@ -20,7 +20,7 @@ service StatisticService {
 message CreateAIServiceRequest {
   string title = 1;
   string description = 2;
-  uint32 price = 3;
+  double price = 3;
 }
 
 message CreateAIServiceResponse {
@@ -57,6 +57,6 @@ message Calls {
   string user_uid = 1;
   string service_uid = 2;
   uint32 count = 3;
-  uint32 amount = 4;
+  double amount = 4;
 }
 
